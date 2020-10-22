@@ -1,11 +1,9 @@
 import React, { useState } from 'react'
-import blogService from '../services/blogs'
 import Toggle from '../components/toggle'
 
-const Blog = ({ blog }) => {
-    const [BlogExpanded, setBlogExpanded] = useState(false)
-    const [showError, setShowError] = useState(null)
+const Blog = ({ blog, likeInc, handleDeleteBlog }) => {
     let [likes, setLikes] = useState(blog.likes)
+    //replace with the action creator for liking a blog
 
     const blogStyle = {
         paddingTop: 5,
@@ -17,50 +15,9 @@ const Blog = ({ blog }) => {
         backgroundColor: 'rgb(170,255,255)',
     }
 
-
-    const toggleExpansion = () => {
-        setBlogExpanded(!BlogExpanded)
-    }
-
     const incrementLikes = async () => {
-        const foundUser = await blogService.getOne(blog.id)
-
-        const changedBlog = {
-            title: foundUser.title,
-            author: foundUser.author,
-            url: foundUser.url,
-            likes: ++foundUser.likes,
-        }
-
-        await blogService.putLike(changedBlog, `/api/blogs/${blog.id}`)
+        await likeInc(blog)
         setLikes(++likes)
-    }
-
-    const deleteBlog = async () => {
-        if(window.confirm(`Are you sure you want to delete ${blog.title} created by ${blog.author}?`)){
-            try{
-                await blogService.deleteBlog(blog.id)
-                toggleExpansion()
-            }
-            catch(error){
-                setShowError('Failed to delete blog, you may not have permission to delete this')
-                setTimeout(() => {
-                    setShowError(null)
-                }, 3000)
-            }
-        }
-    }
-
-    const DisplayError = ({ message }) => {
-        if(message === null){
-            return null
-        }else{
-            return(
-                <div className = 'errorStyle'>
-                    <p>{message}</p>
-                </div>
-            )
-        }
     }
 
     return(
@@ -70,11 +27,10 @@ const Blog = ({ blog }) => {
                     <li>Title: {blog.title}</li>
                     <li>Created by: {blog.author}</li>
                     <Toggle buttonLabel = "Expand">
-                        <DisplayError message={showError}/>
                         <li>URL: {blog.url}</li>
-                        <li>Likes: {likes} <button onClick={incrementLikes}>Like</button> </li>
-                        <button onClick={deleteBlog}>Remove blog</button>
+                        <li>Likes: {likes} <button id = 'button-incrementlikes' onClick={incrementLikes}>Like</button> </li>
                     </Toggle>
+                    <button id='button-deleteblog' onClick={handleDeleteBlog}>Remove blog</button>
                 </ul>
             </div>
         </div>

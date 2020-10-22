@@ -11,10 +11,10 @@ const Toggleable = (props) => {
 
     return(
         <div>
-            <div style={hideWhenVisible} className="toggleableComponent">
-                <button onClick={toggleVisibility}>{props.buttonLabel}</button>
+            <div style={hideWhenVisible} className="toggleableContent">
+                <button id = 'button-toggleExpansion' onClick={toggleVisibility}>{props.buttonLabel}</button>
             </div>
-            <div style={showWhenVisible} className="toggledComponent">
+            <div style={showWhenVisible} className="toggleOpen">
                 {props.children}
                 <button onClick={toggleVisibility}>Close</button>
             </div>

@@ -22,6 +22,7 @@ const create = async (newObject) => {
         headers: { authorization: token }
     }
     const request = await axios.post(baseUrl, newObject, config)
+
     return request.data
 }
 
@@ -42,4 +43,18 @@ const deleteBlog = async (id) => {
     return request.data
 }
 
-export default { getAll, setToken, create, putLike, getOne, deleteBlog }
+const incrementBlogLikes = async (blog) => {
+    const foundUser = await getOne(blog.id)
+
+    const changedBlog = {
+        title: foundUser.title,
+        author: foundUser.author,
+        url: foundUser.url,
+        likes: ++foundUser.likes,
+    }
+
+    const request = await putLike(changedBlog, `/api/blogs/${blog.id}`)
+    return request
+}
+
+export default { getAll, setToken, create, putLike, getOne, deleteBlog, incrementBlogLikes }
