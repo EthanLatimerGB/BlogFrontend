@@ -2,14 +2,18 @@ import blogService from '../services/blogs'
 
 const blogReducer = (state=[], action) => {
     switch(action.type){
-        case'INIT-BLOGS':
-            return action.data
-        case'CREATE-BLOG':
-            return [...state, action.data]
-        case'DELETE-BLOG':
-            return state.filter((blog) => blog.id !== action.data.id)
-        default:
-            return state
+    case'INIT-BLOGS':
+        return action.data
+    case'CREATE-BLOG':
+        return [...state, action.data]
+    case'DELETE-BLOG':
+        return state.filter((blog) => blog.id !== action.data.id)
+    case'UPDATE-COMMENT':
+        return state.map((blog) => {
+            return blog.id === action.data.id ? action.data.response : blog
+        })
+    default:
+        return state
     }
 }
 
@@ -39,6 +43,19 @@ export const deleteBlog = (id) => {
         dispatch({
             type: 'DELETE-BLOG',
             data: id
+        })
+    }
+}
+
+export const updateBlogComments = (blog, comment) => {
+    return async dispatch => {
+        const response = await blogService.createComment(blog, comment)
+        dispatch({
+            type: 'UPDATE-COMMENT',
+            data: {
+                id: blog.id,
+                response,
+            }
         })
     }
 }

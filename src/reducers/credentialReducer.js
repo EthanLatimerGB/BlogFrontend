@@ -1,5 +1,5 @@
 import blogService from '../services/blogs'
-import { setTimedErrorNotification, setTimedNotification } from '../reducers/notificationReducer'
+import { setTimedNotification } from '../reducers/notificationReducer'
 
 let initialState = {
     username: '',

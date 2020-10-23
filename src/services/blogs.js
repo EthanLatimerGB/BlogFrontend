@@ -26,7 +26,7 @@ const create = async (newObject) => {
     return request.data
 }
 
-const putLike = async (changedObject, url) => {
+const put = async (changedObject, url) => {
     const config = {
         headers: { authorization: token }
     }
@@ -51,10 +51,26 @@ const incrementBlogLikes = async (blog) => {
         author: foundUser.author,
         url: foundUser.url,
         likes: ++foundUser.likes,
+        comments: foundUser.comments
     }
 
-    const request = await putLike(changedBlog, `/api/blogs/${blog.id}`)
+    const request = await put(changedBlog, `/api/blogs/${blog.id}`)
     return request
 }
 
-export default { getAll, setToken, create, putLike, getOne, deleteBlog, incrementBlogLikes }
+const createComment = async (blog, comment) => {
+    const foundUser = await getOne(blog.id)
+    let comments = foundUser.comments
+    const changedBlog = {
+        title: foundUser.title,
+        author: foundUser.author,
+        url: foundUser.url,
+        likes: foundUser.likes,
+        comments: comments.concat([comment])
+    }
+
+    const request = await put(changedBlog, `/api/blogs/${blog.id}`)
+    return request
+}
+
+export default { getAll, setToken, create, put , getOne, deleteBlog, incrementBlogLikes, createComment }

@@ -1,7 +1,6 @@
 import React from 'react'
 
-
-const DisplayError = ({ message }) => {
+export const DisplayError = ({ message }) => {
     if(message === null){
         return null
     }else{
@@ -13,7 +12,7 @@ const DisplayError = ({ message }) => {
     }
 }
 
-const DisplayNotification = ({ message }) => {
+export const DisplayNotification = ({ message }) => {
     if(message === null){
         return null
     }
@@ -24,8 +23,4 @@ const DisplayNotification = ({ message }) => {
             </div>
         )
     }
-}
-
-export default {
-    DisplayError, DisplayNotification
 }
